@@ -1,0 +1,19 @@
+.grid-container {
+  display: grid;
+  /* grid-template-columns: repeat(10, 15px); */
+  gap: 1px;
+  background-color: #333;
+  margin: auto;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+
+.cell-item {
+  width: 12px;
+  height: 12px;
+  background-color: white;
+}
+
+.cell-alive {
+  background-color: steelblue;
+}
