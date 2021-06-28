@@ -5,9 +5,7 @@ type counter = {
 let isAlive = (id: int, cellsArr: array<Types.cell>) => {
     let cell = Js.Array.find((c: Types.cell) => c.id == id, cellsArr)
     switch cell {
-    | Some(c) => {
-        c.state == Types.Alive
-      }
+    | Some(c) => c.state == Types.Alive
     | None => false
   }
 }
@@ -60,6 +58,17 @@ let numberOfAliveNeighbors = (id: int, cellList: list<Types.cell>, cellsWide: in
   counter.count
 }
 
+let getNewCellState = (cell: Types.cell, neighborCount: int): Types.cellState => {
+   if (neighborCount < 2 || neighborCount > 3) {
+      Types.Dead
+    }
+    else if neighborCount == 3 {
+      Types.Alive
+    } else {
+      cell.state
+    }
+}
+
 let gridTick = (~cellsList: list<Types.cell>, ~cellsWide: int) => {
   let newCellsArr = []
   cellsList -> Belt.List.forEach((cell) => {
@@ -69,12 +78,12 @@ let gridTick = (~cellsList: list<Types.cell>, ~cellsWide: int) => {
     // Any live cell with two or three live neighbours lives on to the next generation.
     // Any live cell with more than three live neighbours dies, as if by overpopulation.
     // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-    if aliveNeighborsCount < 2 || aliveNeighborsCount > 3 {
-      cell.state = Types.Dead
-    } else if aliveNeighborsCount == 3 {
-      cell.state = Types.Alive
+
+    let newCell: Types.cell = {
+      id: cell.id,
+      state: cell -> getNewCellState(aliveNeighborsCount)
     }
-    newCellsArr -> Js.Array2.push(cell)
+    newCellsArr -> Js.Array2.push(newCell)
   })
   newCellsArr -> Belt.List.fromArray
 }

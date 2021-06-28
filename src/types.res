@@ -1,6 +1,6 @@
 type cellState = Alive | Dead
 
 type cell = {
-  mutable state: cellState,
+  state: cellState,
   id: int
 }
